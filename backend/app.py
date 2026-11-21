@@ -68,4 +68,4 @@ def metrics():
             f"# TYPE smart_campus_registered_students gauge\nsmart_campus_registered_students {count}\n"), 200, {"Content-Type": "text/plain; version=0.0.4"}
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "5000")))  # nosec B104 - required for Docker
