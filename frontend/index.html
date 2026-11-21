@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Smart Campus | Student Portal</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef2ff;color:#172033;font-family:Inter,Segoe UI,Arial,sans-serif}.hero{background:linear-gradient(120deg,#172554,#2563eb);padding:42px 20px;color:white;text-align:center}.hero h1{margin:0 0 8px;font-size:2.2rem}.hero p{margin:0;color:#dbeafe}.wrap{max-width:980px;margin:28px auto;padding:0 16px;display:grid;grid-template-columns:340px 1fr;gap:22px}.card{background:white;border-radius:16px;padding:24px;box-shadow:0 8px 28px #15274b12}.card h2{margin-top:0}.form input{width:100%;padding:12px;margin:9px 0;border:1px solid #d8deeb;border-radius:8px;font-size:1rem}.form button{width:100%;background:#2563eb;color:white;border:0;border-radius:8px;padding:12px;font-size:1rem;font-weight:700;cursor:pointer}.form button:hover{background:#1d4ed8}.msg{min-height:24px;color:#2563eb}.student{border-bottom:1px solid #edf0f5;padding:12px 0}.student:last-child{border:0}.student strong{display:block}.student small{color:#64748b}.empty{color:#64748b}@media(max-width:750px){.wrap{grid-template-columns:1fr}.hero h1{font-size:1.7rem}}
+</style></head>
+<body><header class="hero"><h1>Smart Campus</h1><p>Student Registration & Campus Services Portal</p></header>
+<main class="wrap"><section class="card"><h2>Register a Student</h2><form id="form" class="form"><input name="name" placeholder="Full name" required><input name="email" type="email" placeholder="Email address" required><input name="course" placeholder="Course / Department" required><button type="submit">Register</button></form><p class="msg" id="msg" aria-live="polite"></p></section>
+<section class="card"><h2>Registered Students</h2><div id="list">Loading…</div></section></main>
+<script>
+const list=document.getElementById('list'),msg=document.getElementById('msg');
+async function load(){const r=await fetch('/api/students');const data=await r.json();list.innerHTML=data.length?data.map(s=>`<div class="student"><strong>${escapeHtml(s.name)}</strong><small>${escapeHtml(s.email)} · ${escapeHtml(s.course)}</small></div>`).join(''):'<p class="empty">No registrations yet. Add the first student!</p>'}
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('form').addEventListener('submit',async e=>{e.preventDefault();const data=Object.fromEntries(new FormData(e.target));const r=await fetch('/api/students',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const out=await r.json();msg.textContent=r.ok?'Registration successful!':(out.error||'Registration failed');if(r.ok){e.target.reset();load()}});load();
+</script></body></html>

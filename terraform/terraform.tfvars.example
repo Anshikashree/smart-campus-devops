@@ -1,0 +1,4 @@
+aws_region = "ap-south-1"
+ami_id = "ami-REPLACE_WITH_VALID_UBUNTU_AMI_ID"
+key_name = "REPLACE_WITH_YOUR_EC2_KEY_PAIR"
+my_ip_cidr = "REPLACE_WITH_YOUR_PUBLIC_IP/32"

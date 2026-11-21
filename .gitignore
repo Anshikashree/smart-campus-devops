@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.db
+students.db
+.env
+*.pem
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/

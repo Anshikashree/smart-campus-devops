@@ -1,0 +1,29 @@
+---
+- name: Install Docker and deploy Smart Campus container on Ubuntu
+  hosts: campus_servers
+  become: true
+  tasks:
+    - name: Install Docker packages
+      ansible.builtin.apt:
+        name: [docker.io, docker-compose-v2]
+        state: present
+        update_cache: true
+    - name: Ensure Docker service is enabled
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+    - name: Create application directory
+      ansible.builtin.file:
+        path: /opt/smart-campus
+        state: directory
+        mode: '0755'
+    - name: Copy Compose file
+      ansible.builtin.copy:
+        src: ../docker-compose.yml
+        dest: /opt/smart-campus/docker-compose.yml
+        mode: '0644'
+    - name: Pull/build and start app (expects project files staged at the target)
+      ansible.builtin.command: docker compose up -d
+      args:
+        chdir: /opt/smart-campus
